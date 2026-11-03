@@ -1,0 +1,9 @@
+{
+  "modelo": "small_cnn v1 (2 convs 32ch em 224x224, sem reducao inicial)",
+  "parametros": 1178613,
+  "epocas": 40,
+  "tempo_treino_min": 28,
+  "tempo_fonte": "informado pelo usuario (nao cronometrado em codigo)",
+  "test_f1_macro": 0.1411,
+  "test_acuracia": 0.1973
+}

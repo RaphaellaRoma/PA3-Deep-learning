@@ -1,0 +1,5 @@
+.venv/
+__pycache__/
+pa3_dados/
+*.pt
+
