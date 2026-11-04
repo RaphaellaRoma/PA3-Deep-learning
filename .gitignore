@@ -3,3 +3,4 @@ __pycache__/
 pa3_dados/
 *.pt
 
+*.ckpt

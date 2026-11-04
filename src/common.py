@@ -1,4 +1,5 @@
 """Utilidades compartilhadas: dados, modelos e métricas do PA3."""
+import os
 import random
 from pathlib import Path
 
@@ -12,7 +13,10 @@ from torch.utils.data import Dataset
 from torchvision import models, transforms as T
 
 ROOT = Path(__file__).resolve().parents[1]
-DATA = ROOT / "pa3_dados"
+# No Colab, aponte PA3_DATA para a pasta dos dados (ex.: no Drive). Localmente usa ./pa3_dados.
+DATA = Path(os.environ.get("PA3_DATA", ROOT / "pa3_dados"))
+# GPU só para treino pesado (pré-treino, etc). O modelo entregue e o predict.py rodam em CPU.
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 IMG_SIZE = 224
 MEAN, STD = (0.485, 0.456, 0.406), (0.229, 0.224, 0.225)
 MAX_PARAMS = 12_000_000
@@ -97,7 +101,7 @@ def count_params(model: nn.Module) -> int:
 
 @torch.no_grad()
 def evaluate(model, loader, device, num_classes):
-    model.eval()
+    model.to(device).eval()
     ys, ps, loss_sum = [], [], 0.0
     ce = nn.CrossEntropyLoss(reduction="sum")
     for x, y in loader:
@@ -114,11 +118,14 @@ def evaluate(model, loader, device, num_classes):
 
 
 
-def fit(model, train_dl, val_dl, epochs, lr, num_classes, weight_decay=1e-2, verbose=True):
-    """Treina em CPU e guarda o estado da melhor época segundo o F1 macro no val.
+def fit(model, train_dl, val_dl, epochs, lr, num_classes, weight_decay=1e-2, verbose=True, device=None):
+    """Treina (GPU se houver, senão CPU) e guarda o estado da melhor época segundo o F1 macro no val.
 
-    Retorna (history, best_epoch, best_state). Não toca no test_public.
+    Retorna (history, best_epoch, best_state). O best_state fica sempre em CPU.
+    Não toca no test_public.
     """
+    device = device or DEVICE
+    model.to(device)
     opt = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=weight_decay)
     sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, epochs)
     ce = nn.CrossEntropyLoss()
@@ -127,6 +134,7 @@ def fit(model, train_dl, val_dl, epochs, lr, num_classes, weight_decay=1e-2, ver
         model.train()
         tl, tc, n = 0.0, 0, 0
         for x, y in train_dl:
+            x, y = x.to(device), y.to(device)
             out = model(x)
             loss = ce(out, y)
             opt.zero_grad()
@@ -136,7 +144,7 @@ def fit(model, train_dl, val_dl, epochs, lr, num_classes, weight_decay=1e-2, ver
             tc += (out.argmax(1) == y).sum().item()
             n += len(y)
         sched.step()
-        v = evaluate(model, val_dl, "cpu", num_classes)
+        v = evaluate(model, val_dl, device, num_classes)
         history.append({"epoch": ep, "train_loss": tl / n, "train_acc": tc / n,
                         "val_loss": v["loss"], "val_acc": v["acc"], "val_f1": v["f1_macro"]})
         if verbose:
@@ -144,5 +152,5 @@ def fit(model, train_dl, val_dl, epochs, lr, num_classes, weight_decay=1e-2, ver
             print(f"ep {ep:02d} | treino loss {h['train_loss']:.3f} acc {h['train_acc']:.3f} | "
                   f"val loss {h['val_loss']:.3f} acc {h['val_acc']:.3f} F1 {h['val_f1']:.3f}", flush=True)
         if v["f1_macro"] > best["f1"]:
-            best = {"f1": v["f1_macro"], "epoch": ep, "state": {k: t.clone() for k, t in model.state_dict().items()}}
+            best = {"f1": v["f1_macro"], "epoch": ep, "state": {k: t.detach().cpu().clone() for k, t in model.state_dict().items()}}
     return history, best["epoch"], best["state"]
