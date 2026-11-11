@@ -2,5 +2,6 @@
 __pycache__/
 pa3_dados/
 *.pt
-
 *.ckpt
+ESTUDO_APRESENTACAO.md
+

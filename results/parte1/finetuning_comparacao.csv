@@ -1,0 +1,3 @@
+Modelo (Fine-tuning 105 rótulos),Melhor época (val),F1 macro (val),F1 macro (test_public),Acurácia (test_public)
+simclr_s08,9,0.3885,0.4182,0.4624
+simclr_s40,18,0.3669,0.3918,0.4266
