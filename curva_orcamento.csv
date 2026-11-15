@@ -1,4 +1,4 @@
 metodo,orcamento,seed,f1_macro,acuracia
-piso_scratch,5,0,0.1312,0.1529
-piso_resnet18,5,0,0.4377,0.4538
+piso_scratch,5,0,0.1335,0.1492
+piso_resnet18,5,0,0.4349,0.4587
 trilha_a_simclr,5,0,0.4182,0.4624

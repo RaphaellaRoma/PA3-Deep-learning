@@ -2,6 +2,8 @@
 __pycache__/
 pa3_dados/
 *.pt
+!results/parte1/imagenet_ssl_backbone.pt
 *.ckpt
 ESTUDO_APRESENTACAO.md
+
 
