@@ -1,0 +1,11 @@
+metodo,orcamento,seed,melhor_epoca,val_f1,f1_macro,acuracia,tempo_min
+piso_resnet18,1,0,20,0.1695,0.2302,0.2552,0.19
+piso_resnet18,5,0,17,0.3681,0.4287,0.4451,0.35
+piso_resnet18,5,1,14,0.413,0.478,0.4809,0.35
+piso_resnet18,5,2,8,0.4138,0.4227,0.4612,0.35
+piso_resnet18,20,0,20,0.619,0.6152,0.6486,1.07
+trilha_a_simclr,1,0,19,0.1707,0.2168,0.2392,0.18
+trilha_a_simclr,5,0,11,0.3864,0.4226,0.4673,0.35
+trilha_a_simclr,5,1,11,0.3535,0.4334,0.4821,0.35
+trilha_a_simclr,5,2,12,0.3476,0.4105,0.4353,0.36
+trilha_a_simclr,20,0,13,0.5743,0.5527,0.6054,1.07
