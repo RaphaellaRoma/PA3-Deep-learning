@@ -38,6 +38,11 @@ def build_model(metodo: str, nc: int, ssl_backbone_path: Path):
 
 
 def cmd_train(args):
+    # Padrão: results/treinos/, fora de results/parte2/, para nunca sobrescrever o modelo entregue por acidente.
+    out_dir = ROOT / "results" / "treinos"
+    out_pt = Path(args.saida) if args.saida else (out_dir / f"{args.metodo}_b{args.budget}_s{args.seed}.pt")
+    if out_pt.exists() and not args.sobrescrever:
+        raise SystemExit(f"{out_pt} já existe. Use outro --saida ou passe --sobrescrever.")
     names, c2i = C.load_classes()
     nc = len(names)
     C.set_seed(args.seed)
@@ -56,9 +61,6 @@ def cmd_train(args):
     print(f"Treinando {args.metodo} | orçamento={args.budget} | seed={args.seed} | params={C.count_params(model):,} | device={C.DEVICE}")
     hist, best_ep, best_state = C.fit(model, train_dl, val_dl, epochs=epochs, lr=lr, num_classes=nc)
 
-    out_dir = ROOT / "results" / "parte2"
-    out_dir.mkdir(parents=True, exist_ok=True)
-    out_pt = Path(args.saida) if args.saida else (out_dir / f"{args.metodo}_b{args.budget}_s{args.seed}.pt")
     out_pt.parent.mkdir(parents=True, exist_ok=True)
     torch.save(best_state, out_pt)
     pd.DataFrame(hist).to_csv(out_pt.with_name(f"hist_{out_pt.stem}.csv"), index=False)
@@ -91,7 +93,8 @@ def main():
     pt.add_argument("--epochs", type=int, default=None)
     pt.add_argument("--lr", type=float, default=None)
     pt.add_argument("--bs", type=int, default=32)
-    pt.add_argument("--saida", default=None, help="Caminho opcional para salvar o .pt")
+    pt.add_argument("--saida", default=None, help="Caminho opcional para salvar o .pt (padrão: results/treinos/)")
+    pt.add_argument("--sobrescrever", action="store_true", help="Permite sobrescrever um .pt já existente")
 
     pe = sub.add_parser("eval", help="Avalia um arquivo de pesos .pt em val ou test_public")
     pe.add_argument("--pesos", default=str(ROOT / "results" / "parte2" / "trilha_a_simclr_b5_s0.pt"))

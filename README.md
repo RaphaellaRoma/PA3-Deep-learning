@@ -31,8 +31,10 @@ Os dados esperados estão em `pa3_dados/` (`images/train`, `images/val`, `images
 Para treinar o modelo da Trilha A (se `results/parte1/imagenet_ssl_backbone.pt` já existir, faz o fine-tuning nos 105 rótulos escolhendo a época pelo F1 macro no `val`; caso contrário, executa antes o pré-treino SimCLR):
 
 ```bash
-python src/cli.py train --metodo trilha_a_simclr --budget 5 --seed 0 --saida results/parte2/trilha_a_simclr_b5_s0.pt
+python src/cli.py train --metodo trilha_a_simclr --budget 5 --seed 0
 ```
+
+Os pesos treinados são salvos em `results/treinos/` (ignorado pelo git). O comando **não sobrescreve** o modelo entregue em `results/parte2/` e recusa um `.pt` já existente, a menos que se passe `--sobrescrever`.
 
 Também é possível treinar os pisos da Parte 0 (`--metodo piso_resnet18` ou `--metodo piso_scratch`) e outros orçamentos (`--budget 1` ou `--budget 20`).
 
