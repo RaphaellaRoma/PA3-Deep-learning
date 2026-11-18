@@ -1,0 +1,5 @@
+Backbone (Linear Probe),Melhor época (val),F1 macro (val),F1 macro (test_public),Acurácia (test_public)
+ImageNet puro,13,0.4036,0.4705,0.5142
+ImageNet + SimCLR (min_scale=0.08),8,0.3604,0.3711,0.3798
+Aleatório + SimCLR (min_scale=0.08),31,0.318,0.3318,0.3588
+ImageNet + SimCLR (min_scale=0.40),12,0.3763,0.3625,0.3921

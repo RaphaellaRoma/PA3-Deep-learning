@@ -1,8 +1,8 @@
 """SimCLR (Parte 1, Trilha A): pré-treino auto-supervisionado do backbone ResNet-18 no `train` (sem rótulos).
 
 Otimizado para GPU: as imagens ficam em tensor uint8 na RAM e as aumentações (RandomResizedCrop, Flip,
-ColorJitter, Grayscale) rodam em batch direto na GPU via torchvision.transforms.v2, reduzindo o tempo por época
-de ~40s para ~3-5s no Colab. Se os pesos finais já existirem em disco e force=False, apenas carrega e imprime.
+ColorJitter, Grayscale) rodam em batch direto na GPU via torchvision.transforms.v2, mas os logs em results/parte1/
+mostram ~34 s por época (~30 min por pré-treino de 50 épocas). Se os pesos finais já existirem em disco e force=False, apenas carrega e imprime.
 """
 import time
 from pathlib import Path
