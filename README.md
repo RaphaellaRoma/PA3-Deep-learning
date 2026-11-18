@@ -66,7 +66,24 @@ python predict.py --imagens pa3_dados/images/test_public --saida preds.csv
 
 ---
 
-## 5. Estrutura do Repositório
+## 5. Rodando o notebook no Colab (GPU)
+
+O pré-treino SimCLR e as rodadas da Parte 2 são pensados para GPU. Passo a passo:
+
+1. Abra o notebook pelo botão no topo de `notebooks/pa3.ipynb` ou em
+   [Abrir no Colab](https://colab.research.google.com/github/RaphaellaRoma/PA3-Deep-learning/blob/main/notebooks/pa3.ipynb).
+2. Ative a GPU: *Ambiente de execução → Alterar o tipo de ambiente de execução → GPU (T4)*.
+3. Execute tudo (*Ambiente de execução → Executar tudo*). Não é preciso instalar nada: o código só usa `torch`, `torchvision`, `scikit-learn`, `pandas`, `numpy`, `matplotlib` e `pillow`, que o Colab já traz.
+   - A primeira célula clona este repositório em `/content/PA3-Deep-learning` (ou faz `git pull` se já existir).
+   - Os dados **não** estão no repositório. Se não houver `pa3_dados/`, a célula baixa o `pa3_dados.zip` do enunciado (415 MB, via `gdown`) e o extrai sozinha. Para usar uma cópia no Drive, monte o Drive e defina `os.environ["PA3_DATA"]` antes da primeira célula.
+4. A segunda célula ativa o modo determinístico da GPU, para a mesma configuração e seed repetirem o resultado.
+5. A última célula gera `resultados_pa3.zip` (CSVs, figuras e logs) e `pesos_pa3.zip` (pesos `.pt`) e os baixa. Extraia os dois na raiz do repositório local e faça o commit. A VM é descartada ao fim da sessão, então baixe antes de fechar.
+
+**Cache e reexecução.** O notebook pula etapas cujos resultados já existem em `results/` (`FORCE_RETRAIN` na Parte 1 e `FORCE_RETRAIN_P2` na Parte 2). O pré-treino ImageNet + SimCLR (`results/parte1/imagenet_ssl_backbone.pt`) vem no repositório. Os backbones `random_ssl` e `imagenet_ssl_s40` são treinados na primeira execução (cerca de 3 a 5 min cada na GPU). Para refazer uma etapa, apague os arquivos dela em `results/`; só use `FORCE_RETRAIN = True` se quiser retreinar também o SimCLR.
+
+---
+
+## 6. Estrutura do Repositório
 
 | Arquivo / Pasta | Descrição |
 |---|---|
