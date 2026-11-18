@@ -25,7 +25,10 @@ MAX_PARAMS = 12_000_000
 def set_seed(seed: int):
     random.seed(seed)
     np.random.seed(seed)
-    torch.manual_seed(seed)
+    torch.manual_seed(seed)  # também semeia todas as GPUs
+    # Reduz a variação entre execuções na GPU (a mesma configuração e seed devem repetir o resultado).
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
 
 
 def load_classes():

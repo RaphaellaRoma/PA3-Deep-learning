@@ -5,6 +5,8 @@ pa3_dados/
 !results/parte0/resnet18_b5_s0.pt
 !results/parte0/scratch_b5_s0.pt
 !results/parte1/imagenet_ssl_backbone.pt
+!results/parte1/random_ssl_backbone.pt
+!results/parte1/imagenet_ssl_s40_backbone.pt
 !results/parte1/trilha_a_best_b5_s0.pt
 !results/parte2/trilha_a_simclr_b5_s0.pt
 *.ckpt
