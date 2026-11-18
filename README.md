@@ -78,6 +78,8 @@ python predict.py --imagens pa3_dados/images/test_public --saida preds.csv
 | `curva_orcamento.csv` | Números consolidados da Parte 2 (`metodo,orcamento,seed,f1_macro,acuracia`) |
 | `results/parte0/` | Pesos, históricos e figuras (curvas e matriz de confusão) do piso supervisionado |
 | `results/parte1/` | Pesos do backbone SimCLR (`imagenet_ssl_backbone.pt`), logs de perda e tabelas do Linear Probe e aumentação |
-| `results/parte2/` | Pesos do modelo final (`trilha_a_simclr_b5_s0.pt`), `runs.csv`, curva de orçamento e ganho por classe |
-| `results/parte3/` | Predições do modelo final, matriz de confusão e galerias de erros/acertos com Grad-CAM e oclusão |
+| `results/parte2/` | Pesos e predições do modelo final (`trilha_a_simclr_b5_s0.pt`, `preds_trilha_a_simclr_b5_s0.csv`), `runs.csv`, curva de orçamento e ganho por classe. As predições das outras 5 rodadas do orçamento 5 rodaram no Colab e não estão versionadas (ver nota abaixo) |
+| `results/parte3/` | Matriz de confusão do modelo final, pares mais confundidos, tabela de saliência e galerias de erros/acertos com Grad-CAM e oclusão |
 | `AI_LOG.md` | Registro de uso de ferramentas de IA no trabalho |
+
+**Nota de reprodutibilidade.** O ganho por classe (Parte 2.3) usa as predições no `test_public` das 6 rodadas do orçamento 5 (piso e Trilha A, 3 seeds). Só a da Trilha A com seed 0 (o modelo entregue) está no repositório; as outras 5 foram geradas no Colab e não foram recuperadas. Por isso, sem rodar de novo a seção 2.1 do notebook, a seção 2.3 carrega o `results/parte2/ganho_por_classe_b5.csv` calculado na execução original em vez de recalculá-lo.
